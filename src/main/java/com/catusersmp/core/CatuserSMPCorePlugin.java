@@ -6,6 +6,9 @@ import com.catusersmp.core.command.impl.ReloadCommand;
 import com.catusersmp.core.config.ConfigService;
 import com.catusersmp.core.config.Messages;
 import com.catusersmp.core.module.ModuleManager;
+import com.catusersmp.core.module.impl.HardcoreDeathModule;
+import com.catusersmp.core.module.impl.SilentJoinModule;
+import com.catusersmp.core.module.impl.SilentQuitModule;
 import com.catusersmp.core.util.Tasks;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -54,6 +57,9 @@ public final class CatuserSMPCorePlugin extends JavaPlugin {
         this.tasks = new Tasks(this);
 
         this.moduleManager = new ModuleManager(this);
+        this.moduleManager.register(new SilentJoinModule(this));
+        this.moduleManager.register(new SilentQuitModule(this));
+        this.moduleManager.register(new HardcoreDeathModule(this));
 
         this.commandRegistry = new CommandRegistry(this);
         this.commandRegistry.register(new InfoCommand(this));

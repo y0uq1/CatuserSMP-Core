@@ -29,3 +29,9 @@ info:
 reload:
   success: '<prefix><green>配置已重新加载 <dark_gray>(<white><time>ms</white>)</dark_gray>'
   failed: '<prefix><red>重载失败，请查看控制台日志。'
+
+# 仅输出到控制台的玩家进出记录
+console:
+  join: '<red>[+] <player>'
+  quit: '<red>[-] <player>'
+

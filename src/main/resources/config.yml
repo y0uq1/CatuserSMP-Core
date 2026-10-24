@@ -7,5 +7,17 @@ settings:
   # 是否在控制台输出调试信息（模块启停、命令执行细节等）
   debug: false
 
-# 模块开关：随着功能模块的加入，在此处按 modules.<id>.enabled 结构追加
-modules: {}
+modules:
+  # 玩家加入：不再向全服广播 "xxx 加入了游戏"，仅在控制台输出红色 [+]
+  silent-join:
+    enabled: true
+
+  # 玩家退出：不再向全服广播 "xxx 退出了游戏"，仅在控制台输出红色 [-]
+  silent-quit:
+    enabled: true
+
+  # 极限模式死亡：立即切换旁观者模式，并停留在死亡位置
+  hardcore-death:
+    enabled: true
+    # 仅对 hardcore 世界生效；改为 false 则所有世界都按此逻辑处理
+    only-hardcore: true
