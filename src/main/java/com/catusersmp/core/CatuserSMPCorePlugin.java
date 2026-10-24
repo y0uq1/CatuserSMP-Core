@@ -2,11 +2,16 @@ package com.catusersmp.core;
 
 import com.catusersmp.core.command.CommandRegistry;
 import com.catusersmp.core.command.impl.InfoCommand;
+import com.catusersmp.core.command.impl.KitCommand;
+import com.catusersmp.core.command.impl.ModuleCommand;
 import com.catusersmp.core.command.impl.ReloadCommand;
+import com.catusersmp.core.config.BypassList;
 import com.catusersmp.core.config.ConfigService;
 import com.catusersmp.core.config.Messages;
+import com.catusersmp.core.kit.KitManager;
 import com.catusersmp.core.module.ModuleManager;
 import com.catusersmp.core.module.impl.ChatInterceptorModule;
+import com.catusersmp.core.module.impl.ClearInventoryModule;
 import com.catusersmp.core.module.impl.HardcoreDeathModule;
 import com.catusersmp.core.module.impl.SilentJoinModule;
 import com.catusersmp.core.module.impl.SilentQuitModule;
@@ -27,6 +32,8 @@ public final class CatuserSMPCorePlugin extends JavaPlugin {
 
     private ConfigService configService;
     private Messages messages;
+    private BypassList bypassList;
+    private KitManager kitManager;
     private Tasks tasks;
     private ModuleManager moduleManager;
     private CommandRegistry commandRegistry;
@@ -55,6 +62,12 @@ public final class CatuserSMPCorePlugin extends JavaPlugin {
         this.messages = new Messages(this);
         this.messages.load();
 
+        this.bypassList = new BypassList(this);
+        this.bypassList.load();
+
+        this.kitManager = new KitManager(this);
+        this.kitManager.setup();
+
         this.tasks = new Tasks(this);
 
         this.moduleManager = new ModuleManager(this);
@@ -62,9 +75,12 @@ public final class CatuserSMPCorePlugin extends JavaPlugin {
         this.moduleManager.register(new SilentQuitModule(this));
         this.moduleManager.register(new HardcoreDeathModule(this));
         this.moduleManager.register(new ChatInterceptorModule(this));
+        this.moduleManager.register(new ClearInventoryModule(this));
 
         this.commandRegistry = new CommandRegistry(this);
         this.commandRegistry.register(new InfoCommand(this));
+        this.commandRegistry.register(new ModuleCommand(this));
+        this.commandRegistry.register(new KitCommand(this, this.kitManager));
         this.commandRegistry.register(new ReloadCommand(this));
 
         bindCommand("catuser");
@@ -95,6 +111,7 @@ public final class CatuserSMPCorePlugin extends JavaPlugin {
     public void reload() {
         this.configService.load();
         this.messages.load();
+        this.bypassList.load();
         this.moduleManager.reloadAll();
     }
 
@@ -118,6 +135,14 @@ public final class CatuserSMPCorePlugin extends JavaPlugin {
 
     public Tasks tasks() {
         return this.tasks;
+    }
+
+    public BypassList bypass() {
+        return this.bypassList;
+    }
+
+    public KitManager kits() {
+        return this.kitManager;
     }
 
     public ModuleManager modules() {

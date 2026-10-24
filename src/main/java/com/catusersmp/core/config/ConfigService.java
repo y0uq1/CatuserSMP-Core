@@ -56,6 +56,12 @@ public final class ConfigService {
         return this.config.getString(path, fallback);
     }
 
+    /** Writes {@code modules.<id>.enabled} and persists config.yml. */
+    public void setModuleEnabled(String moduleId, boolean enabled) {
+        this.config.set("modules." + moduleId + ".enabled", enabled);
+        this.plugin.saveConfig();
+    }
+
     public void save() {
         this.plugin.saveConfig();
     }

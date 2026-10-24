@@ -49,6 +49,25 @@ public final class ModuleManager {
         enableAll();
     }
 
+    /**
+     * Applies a new state to one module and writes it to config.yml so it survives restarts.
+     *
+     * @return {@code false} when the module id is unknown
+     */
+    public boolean setEnabled(String id, boolean enabled) {
+        final Module module = this.modules.get(id);
+        if (module == null) {
+            return false;
+        }
+        this.plugin.config().setModuleEnabled(id, enabled);
+        if (enabled) {
+            module.enable();
+        } else {
+            module.disable();
+        }
+        return true;
+    }
+
     public Optional<Module> byId(String id) {
         return Optional.ofNullable(this.modules.get(id));
     }

@@ -33,3 +33,7 @@ modules:
     notify-sender: true
     # 是否把被拦截的消息记录到控制台
     log-blocked: true
+
+  # 退出清空背包：玩家退出时清空背包（OP 与 bypass.yml 名单内的玩家除外）
+  clear-inventory:
+    enabled: true

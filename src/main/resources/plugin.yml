@@ -18,3 +18,9 @@ permissions:
   catusersmp.command.reload:
     description: Allows reloading the plugin configuration.
     default: op
+  catusersmp.command.kit:
+    description: Allows saving and giving kits (/catuser kit).
+    default: op
+  catusersmp.command.module:
+    description: Allows toggling feature modules (/catuser module).
+    default: op

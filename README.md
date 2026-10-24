@@ -50,10 +50,14 @@ CatuserSMP-Core/
     │   ├── command/
     │   │   ├── SubCommand.java              子命令契约
     │   │   ├── CommandRegistry.java         分发 + 权限 + Tab 补全
-    │   │   └── impl/                        help / info / reload
+    │   │   └── impl/                        help / info / reload / kit / module
     │   ├── config/
     │   │   ├── ConfigService.java           类型化读取 config.yml
-    │   │   └── Messages.java                MiniMessage 文本层（messages.yml）
+    │   │   ├── Messages.java                MiniMessage 文本层（messages.yml）
+    │   │   └── BypassList.java              bypass.yml（UUID 名单）
+    │   ├── kit/
+    │   │   ├── Kit.java                     kit 数据（槽位 -> 物品）
+    │   │   └── KitManager.java              保存 / 读取 / 发放，物品以 NBT 字节序列化
     │   ├── module/
     │   │   ├── Module.java                  可开关特性基类（实现 Listener 自动注册/注销）
     │   │   ├── ModuleManager.java           注册、按配置启停、逆序关闭
@@ -61,7 +65,8 @@ CatuserSMP-Core/
     │   │       ├── SilentJoinModule.java    隐藏加入广播，控制台绿色 [+]
     │   │       ├── SilentQuitModule.java    隐藏退出广播，控制台红色 [-]
     │   │       ├── HardcoreDeathModule.java 极限模式死亡 -> 旁观者 + 停留在死亡点
-    │   │       └── ChatInterceptorModule.java 拦截玩家聊天（全量 / 关键词）
+    │   │       ├── ChatInterceptorModule.java 拦截玩家聊天（全量 / 关键词）
+    │   │       └── ClearInventoryModule.java  退出清空背包（OP / bypass.yml 除外）
     │   └── util/
     │       ├── Text.java                    MiniMessage 解析与降级
     │       └── Tasks.java                   同步/异步/延时/循环调度封装
@@ -78,8 +83,30 @@ CatuserSMP-Core/
 | `/catuser help` | — | 所有人 | 列出当前发送者可见的子命令 |
 | `/catuser info` | `catusersmp.command.info` | OP | 插件 / 服务端 / Java / 模块状态 |
 | `/catuser reload` | `catusersmp.command.reload` | OP | 重载 config.yml、messages.yml 并重算模块 |
+| `/catuser module` | `catusersmp.command.module` | OP | 查看模块状态；`<id> [on\|off\|toggle]` 开关并写回配置 |
+| `/catuser kit save <kit>` | `catusersmp.command.kit` | OP | 把当前背包保存为 kit（同名覆盖） |
+| `/catuser kit load <kit> <player>` | `catusersmp.command.kit` | OP | 把 kit 发给指定玩家 |
+| `/catuser kit loadall <kit>` | `catusersmp.command.kit` | OP | 发给所有在线且不在 bypass.yml 的玩家 |
 
-别名：`/csmp`、`/catcore`、`/catuser ?`、`/catuser rl`。
+别名：`/csmp`、`/catcore`、`/catuser ?`、`/catuser rl`。`/csmp` 与 `/catuser` 完全等价，例如 `/csmp kit load starter Steve`。
+
+## 数据文件
+
+| 文件 | 作用 |
+| --- | --- |
+| `config.yml` | 模块开关与调试日志；`/catuser module` 的改动会写回这里 |
+| `messages.yml` | 全部文本（MiniMessage），包括控制台进出/聊天拦截格式 |
+| `bypass.yml` | UUID 名单：退出不清背包、不接收 `loadall` 礼包 |
+| `kits/*.yml` | 每个 kit 一个文件，物品按槽位存 Base64(NBT) |
+
+`bypass.yml` 示例：
+
+```yaml
+bypass:
+  - '069a79f4-44e9-4726-a5be-fca90e38aaf5'
+```
+
+改完执行 `/catuser reload` 生效（会重新读取 bypass.yml 与 kits 目录）。
 
 ## 内置模块
 
@@ -89,6 +116,7 @@ CatuserSMP-Core/
 | `silent-quit` | 开启 | 不再向全服广播「xxx 退出了游戏」，只在控制台输出红色 `[-] <player>` |
 | `hardcore-death` | 开启 | 极限模式死亡后立即切换旁观者，并停留在死亡位置 |
 | `chat-interceptor` | 开启 | 拦截玩家聊天：默认拦截全部消息，也可改为按关键词拦截 |
+| `clear-inventory` | 开启 | 退出时清空背包；OP 与 bypass.yml 名单内的玩家除外 |
 
 控制台进出格式在 `messages.yml` 的 `console.join` / `console.quit`，默认 `<green>[+] <player>` 与 `<red>[-] <player>`；
 所有模块都能在 `config.yml` 的 `modules.<id>.enabled` 单独关闭，`/catuser reload` 即时生效。
@@ -98,6 +126,13 @@ CatuserSMP-Core/
 
 `chat-interceptor` 默认 `block-all: true`，即拦截**所有**玩家聊天（消息不会广播，可按开关提示发送者、记录到控制台）；
 设为 `false` 后只拦截包含 `blocked-words` 中关键词的消息，适合做广告/屏蔽词过滤。
+
+Kit 是命令工具而不是可开关模块（按权限控制）：
+
+- `save` 保存背包全部 41 个槽位（含盔甲、副手），物品用 `ItemStack#serializeAsBytes()` 序列化，
+  自定义名称、Lore、附魔、属性以及 NBT / 数据组件都会原样还原。
+- `load` 是「发放」语义：优先放回原槽位，槽位被占用则并入空位，背包满时掉落在脚下，不会销毁玩家已有物品。
+- `loadall` 只对**在线**玩家生效，并跳过 `bypass.yml` 中的 UUID。
 
 ## 扩展指南
 

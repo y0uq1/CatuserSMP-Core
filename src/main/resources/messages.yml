@@ -9,6 +9,7 @@ prefix: '<gradient:#00d4ff:#0066ff><bold>CatuserSMP</bold></gradient> <dark_gray
 
 command:
   no-permission: '<prefix><red>你没有权限执行该命令。'
+  player-only: '<prefix><red>该命令只能由玩家执行。'
   unknown: '<prefix><red>未知的子命令 <white><input></white>，输入 <yellow>/catuser help</yellow> 查看帮助。'
   usage: '<prefix><gray>用法: <white><usage>'
   error: '<prefix><red>命令执行失败，请查看控制台日志。'
@@ -38,4 +39,27 @@ console:
 
 chat:
   blocked: '<prefix><red>你的消息已被服务器拦截。'
+
+kit:
+  unknown-sub: '<prefix><red>未知的 kit 子命令: <white><input></white>（load / save / loadall）'
+  not-found: '<prefix><red>找不到 kit: <white><kit>'
+  empty: '<prefix><red>该 kit 没有任何物品: <white><kit>'
+  invalid-name: '<prefix><red>kit 名字只能包含字母、数字、下划线和连字符（最长 32 个字符）。'
+  player-not-found: '<prefix><red>找不到在线玩家: <white><player>'
+  saved: '<prefix><green>已保存 kit <white><kit></white> <dark_gray>(<white><count></white> 件物品)</dark_gray>'
+  overwritten: '<prefix><green>已覆盖 kit <white><kit></white> <dark_gray>(<white><count></white> 件物品)</dark_gray>'
+  save-empty: '<prefix><red>你的背包是空的，无法保存为 kit。'
+  save-failed: '<prefix><red>保存 kit 失败，请查看控制台日志。'
+  given: '<prefix><green>已将 kit <white><kit></white> 发给 <white><player></white>'
+  received: '<prefix><green>你收到了礼包 <white><kit></white>'
+  load-all: '<prefix><green>已向 <white><count></white> 名玩家发放 kit <white><kit></white>'
+
+module:
+  header: '<prefix><gray>模块状态:'
+  entry-on: '<dark_gray>  ▪ </dark_gray><white><id></white> <green>开启'
+  entry-off: '<dark_gray>  ▪ </dark_gray><white><id></white> <red>关闭'
+  unknown: '<prefix><red>未知模块: <white><id>'
+  enabled: '<prefix><green>模块 <white><id></white> 已开启'
+  disabled: '<prefix><yellow>模块 <white><id></white> 已关闭'
+  invalid-value: '<prefix><red>无效的开关值: <white><value></white>（可用 on / off / toggle）'
 
