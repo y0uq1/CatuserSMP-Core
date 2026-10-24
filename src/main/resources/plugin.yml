@@ -24,3 +24,6 @@ permissions:
   catusersmp.command.module:
     description: Allows toggling feature modules (/catuser module).
     default: op
+  catusersmp.command.bypass:
+    description: Allows managing the bypass.yml UUID list (/catuser bypass).
+    default: op

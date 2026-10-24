@@ -68,24 +68,32 @@ public final class BypassList {
         return Set.copyOf(this.bypassed);
     }
 
-    /** Adds a player to the list and rewrites the file. */
-    public void add(UUID uuid) {
+    /** Adds a player to the list and rewrites the file. @return {@code true} when it was not present */
+    public boolean add(UUID uuid) {
         if (this.bypassed.add(uuid)) {
             save();
+            return true;
         }
+        return false;
     }
 
-    /** Removes a player from the list and rewrites the file. */
-    public void remove(UUID uuid) {
+    /** Removes a player from the list and rewrites the file. @return {@code true} when it was present */
+    public boolean remove(UUID uuid) {
         if (this.bypassed.remove(uuid)) {
             save();
+            return true;
         }
+        return false;
     }
 
     private void save() {
-        final YamlConfiguration yaml = new YamlConfiguration();
-        yaml.set(KEY, this.bypassed.stream().map(UUID::toString).sorted().toList());
         try {
+            // Reuse the existing file so the explanatory header comments survive a rewrite.
+            if (!this.file.isFile()) {
+                writeTemplate();
+            }
+            final YamlConfiguration yaml = YamlConfiguration.loadConfiguration(this.file);
+            yaml.set(KEY, this.bypassed.stream().map(UUID::toString).sorted().toList());
             yaml.save(this.file);
         } catch (IOException exception) {
             this.plugin.getLogger().log(Level.SEVERE, "无法写入 bypass.yml", exception);

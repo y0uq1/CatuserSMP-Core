@@ -1,6 +1,7 @@
 package com.catusersmp.core;
 
 import com.catusersmp.core.command.CommandRegistry;
+import com.catusersmp.core.command.impl.BypassCommand;
 import com.catusersmp.core.command.impl.InfoCommand;
 import com.catusersmp.core.command.impl.KitCommand;
 import com.catusersmp.core.command.impl.ModuleCommand;
@@ -80,6 +81,7 @@ public final class CatuserSMPCorePlugin extends JavaPlugin {
         this.commandRegistry = new CommandRegistry(this);
         this.commandRegistry.register(new InfoCommand(this));
         this.commandRegistry.register(new ModuleCommand(this));
+        this.commandRegistry.register(new BypassCommand(this));
         this.commandRegistry.register(new KitCommand(this, this.kitManager));
         this.commandRegistry.register(new ReloadCommand(this));
 

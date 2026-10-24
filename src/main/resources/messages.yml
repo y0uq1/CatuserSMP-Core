@@ -63,3 +63,16 @@ module:
   disabled: '<prefix><yellow>模块 <white><id></white> 已关闭'
   invalid-value: '<prefix><red>无效的开关值: <white><value></white>（可用 on / off / toggle）'
 
+bypass:
+  unknown-sub: '<prefix><red>未知的 bypass 子命令: <white><input></white>（add / remove / list）'
+  player-not-found: '<prefix><red>找不到玩家 <white><player></white>（需要在线或曾进入过服务器，也可以直接填 UUID）'
+  added: '<prefix><green>已将 <white><player></white> <dark_gray>(<white><uuid></white>)</dark_gray> 加入 bypass.yml'
+  added-uuid: '<prefix><green>已将 <white><uuid></white> 加入 bypass.yml'
+  already: '<prefix><yellow><white><player></white> 已在 bypass.yml 中'
+  removed: '<prefix><green>已从 bypass.yml 移除 <white><player></white> <dark_gray>(<white><uuid></white>)</dark_gray>'
+  removed-uuid: '<prefix><green>已将 <white><uuid></white> 从 bypass.yml 移除'
+  not-present: '<prefix><yellow><white><player></white> 不在 bypass.yml 中'
+  list-header: '<prefix><gray>bypass 名单（<white><count></white> 人）:'
+  list-entry: '<dark_gray>  ▪ </dark_gray><white><uuid></white>'
+  list-empty: '<prefix><gray>bypass 名单为空。'
+

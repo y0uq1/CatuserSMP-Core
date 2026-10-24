@@ -87,6 +87,8 @@ CatuserSMP-Core/
 | `/catuser kit save <kit>` | `catusersmp.command.kit` | OP | 把当前背包保存为 kit（同名覆盖） |
 | `/catuser kit load <kit> <player>` | `catusersmp.command.kit` | OP | 把 kit 发给指定玩家 |
 | `/catuser kit loadall <kit>` | `catusersmp.command.kit` | OP | 发给所有在线且不在 bypass.yml 的玩家 |
+| `/catuser bypass add <player\|uuid>` | `catusersmp.command.bypass` | OP | 解析玩家 UUID 并写入 bypass.yml |
+| `/catuser bypass remove <player\|uuid>`、`/catuser bypass list` | `catusersmp.command.bypass` | OP | 从名单移除 / 查看名单 |
 
 别名：`/csmp`、`/catcore`、`/catuser ?`、`/catuser rl`。`/csmp` 与 `/catuser` 完全等价，例如 `/csmp kit load starter Steve`。
 
@@ -107,6 +109,8 @@ bypass:
 ```
 
 改完执行 `/catuser reload` 生效（会重新读取 bypass.yml 与 kits 目录）。
+也可以直接用命令维护：`/catuser bypass add <玩家名>` 会先查在线玩家，再查服务端离线玩家缓存，
+解析出 UUID 后写入文件；也接受直接填 UUID（玩家没进过服时可用）。`add` 之后无需 reload，内存中的名单会同步更新。
 
 ## 内置模块
 
