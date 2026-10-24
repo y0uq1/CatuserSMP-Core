@@ -1,0 +1,17 @@
+.gradle/
+build/
+out/
+run/
+logs/
+
+# 本地临时目录（测试服务端、下载缓存等），不要提交
+/.tmp-dl/
+/.gradle-home/
+*.iml
+.idea/
+.vscode/
+.settings/
+.classpath
+.project
+.DS_Store
+Thumbs.db

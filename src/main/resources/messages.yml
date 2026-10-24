@@ -1,0 +1,31 @@
+# ============================================================
+#  CatuserSMP-Core - 文本配置（MiniMessage 格式）
+#  语法参考: https://docs.advntr.dev/minimessage/format.html
+#  颜色示例: <red> <#ff8800> <gradient:#00d4ff:#0066ff> <bold>
+# ============================================================
+
+# 全局前缀，任意消息中可用 <prefix> 引用
+prefix: '<gradient:#00d4ff:#0066ff><bold>CatuserSMP</bold></gradient> <dark_gray>»</dark_gray> '
+
+command:
+  no-permission: '<prefix><red>你没有权限执行该命令。'
+  unknown: '<prefix><red>未知的子命令 <white><input></white>，输入 <yellow>/catuser help</yellow> 查看帮助。'
+  usage: '<prefix><gray>用法: <white><usage>'
+  error: '<prefix><red>命令执行失败，请查看控制台日志。'
+
+help:
+  header: '<prefix><gray>可用命令:'
+  entry: '<dark_gray>  ▪ </dark_gray><yellow><usage></yellow> <dark_gray>-</dark_gray> <gray><description>'
+  footer: '<dark_gray> 提示: 使用 Tab 键可以自动补全命令。'
+
+info:
+  header: '<prefix><gray>插件信息'
+  version: '<dark_gray>  ▪ </dark_gray><gray>插件版本: <white><version>'
+  server: '<dark_gray>  ▪ </dark_gray><gray>服务端: <white><server>'
+  java: '<dark_gray>  ▪ </dark_gray><gray>Java: <white><java>'
+  modules: '<dark_gray>  ▪ </dark_gray><gray>模块: <white><enabled></white><gray>/<white><total>'
+  footer: '<dark_gray>  CatuserSMP-Core - Paper 插件框架'
+
+reload:
+  success: '<prefix><green>配置已重新加载 <dark_gray>(<white><time>ms</white>)</dark_gray>'
+  failed: '<prefix><red>重载失败，请查看控制台日志。'

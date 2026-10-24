@@ -1,0 +1,20 @@
+name: CatuserSMP-Core
+version: '${version}'
+main: com.catusersmp.core.CatuserSMPCorePlugin
+description: Core framework plugin for the CatuserSMP server.
+authors: [ CatuserSMP ]
+api-version: '1.21'
+
+commands:
+  catuser:
+    description: Main command of CatuserSMP-Core.
+    usage: /catuser help
+    aliases: [ csmp, catcore ]
+
+permissions:
+  catusersmp.command.info:
+    description: Allows viewing plugin and server information.
+    default: op
+  catusersmp.command.reload:
+    description: Allows reloading the plugin configuration.
+    default: op
