@@ -58,9 +58,10 @@ CatuserSMP-Core/
     │   │   ├── Module.java                  可开关特性基类（实现 Listener 自动注册/注销）
     │   │   ├── ModuleManager.java           注册、按配置启停、逆序关闭
     │   │   └── impl/
-    │   │       ├── SilentJoinModule.java    隐藏加入广播，控制台红色 [+]
+    │   │       ├── SilentJoinModule.java    隐藏加入广播，控制台绿色 [+]
     │   │       ├── SilentQuitModule.java    隐藏退出广播，控制台红色 [-]
-    │   │       └── HardcoreDeathModule.java 极限模式死亡 -> 旁观者 + 停留在死亡点
+    │   │       ├── HardcoreDeathModule.java 极限模式死亡 -> 旁观者 + 停留在死亡点
+    │   │       └── ChatInterceptorModule.java 拦截玩家聊天（全量 / 关键词）
     │   └── util/
     │       ├── Text.java                    MiniMessage 解析与降级
     │       └── Tasks.java                   同步/异步/延时/循环调度封装
@@ -84,15 +85,19 @@ CatuserSMP-Core/
 
 | 模块 id | 默认 | 说明 |
 | --- | --- | --- |
-| `silent-join` | 开启 | 不再向全服广播「xxx 加入了游戏」，只在控制台输出红色 `[+] <player>` |
+| `silent-join` | 开启 | 不再向全服广播「xxx 加入了游戏」，只在控制台输出绿色 `[+] <player>` |
 | `silent-quit` | 开启 | 不再向全服广播「xxx 退出了游戏」，只在控制台输出红色 `[-] <player>` |
 | `hardcore-death` | 开启 | 极限模式死亡后立即切换旁观者，并停留在死亡位置 |
+| `chat-interceptor` | 开启 | 拦截玩家聊天：默认拦截全部消息，也可改为按关键词拦截 |
 
-控制台进出格式在 `messages.yml` 的 `console.join` / `console.quit`，默认 `<red>[+] <player>` 与 `<red>[-] <player>`；
+控制台进出格式在 `messages.yml` 的 `console.join` / `console.quit`，默认 `<green>[+] <player>` 与 `<red>[-] <player>`；
 所有模块都能在 `config.yml` 的 `modules.<id>.enabled` 单独关闭，`/catuser reload` 即时生效。
 
 `hardcore-death` 默认只对 `hardcore` 世界生效（`modules.hardcore-death.only-hardcore`），并且会覆盖原版的重生点：
 只设置旁观者模式的话，玩家点「重生」后仍会被送回世界出生点，所以模块同时接管了 `PlayerRespawnEvent`。
+
+`chat-interceptor` 默认 `block-all: true`，即拦截**所有**玩家聊天（消息不会广播，可按开关提示发送者、记录到控制台）；
+设为 `false` 后只拦截包含 `blocked-words` 中关键词的消息，适合做广告/屏蔽词过滤。
 
 ## 扩展指南
 

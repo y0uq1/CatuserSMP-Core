@@ -32,6 +32,10 @@ reload:
 
 # 仅输出到控制台的玩家进出记录
 console:
-  join: '<red>[+] <player>'
+  join: '<green>[+] <player>'
   quit: '<red>[-] <player>'
+  chat-blocked: '<gray>[chat] <white><player><gray>: <white><message>'
+
+chat:
+  blocked: '<prefix><red>你的消息已被服务器拦截。'
 
